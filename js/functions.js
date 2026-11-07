@@ -56,3 +56,32 @@ function extractNumbers(input) {
 
   return parseInt(digits, 10);
 }
+
+/**
+ * Преобразует строку времени вида 'часы:минуты' в количество минут с начала суток.
+ * @param {string} time - Время в формате 'HH:MM' или 'H:M'.
+ * @returns {number} Количество минут с начала суток.
+ */
+function parseTimeToMinutes(time) {
+  const parts = time.split(':');
+  const hours = parseInt(parts[0], 10);
+  const minutes = parseInt(parts[1], 10);
+  return hours * 60 + minutes;
+}
+
+/**
+ * Проверяет, укладывается ли встреча в рамки рабочего дня.
+ * @param {string} workStart - Время начала рабочего дня ('HH:MM' или 'H:M').
+ * @param {string} workEnd - Время окончания рабочего дня ('HH:MM' или 'H:M').
+ * @param {string} meetingStart - Время начала встречи ('HH:MM' или 'H:M').
+ * @param {number} duration - Длительность встречи в минутах.
+ * @returns {boolean} true, если встреча укладывается в рабочий день, иначе false.
+ */
+function isMeetingWithinWorkingHours(workStart, workEnd, meetingStart, duration) {
+  const startWorkMinutes = parseTimeToMinutes(workStart);
+  const endWorkMinutes = parseTimeToMinutes(workEnd);
+  const startMeetingMinutes = parseTimeToMinutes(meetingStart);
+  const endMeetingMinutes = startMeetingMinutes + duration;
+
+  return startMeetingMinutes >= startWorkMinutes && endMeetingMinutes <= endWorkMinutes;
+}
